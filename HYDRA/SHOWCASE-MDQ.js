@@ -25,3 +25,11 @@ src(o0)
   .saturate(1.3)
   .colorama(() => 0.1 + 0.1 * Math.sin(time * 0.4))
   .out(o0);
+
+// CTRL-Enter: run a line of code
+// CTRL-Shift-Enter: run all code on screen
+// ALT-Enter: run a block
+// CTRL-Shift-H: hide or show code
+// CTRL-Shift-F: format code using Prettier
+// CTRL-Shift-S: Save screenshot and download as local file
+// CTRL-Shift-G: Share to twitter (if available). Shares to @hydra_patterns
