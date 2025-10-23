@@ -1,15 +1,15 @@
 // utils/strudel-p5.mjs
 // Licensed CC BY-NC-SA 4.0
-// p5 ↔ Strudel ↔ Hydra bridge (headless p5, DPR sync, pointer tracking)
+// p5 ↔ Strudel ↔ Hydra bridge (off-DOM p5.Graphics, DPR sync, pointer tracking)
 // Exports: mountP5, hydraGate
-// v1.1
+// v1.2
 
 const P5_URL = "https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js";
 
 const state = (window.__P5BOOT ||= {
-  inst: null,
-  cvs: null,
-  host: null,
+  inst: null, // p5 instance
+  g: null, // p5.Graphics offscreen render target
+  host: null, // Strudel host canvas (if available)
   pointer: {
     x: 0,
     y: 0,
@@ -33,14 +33,14 @@ async function waitForHostCanvas(timeoutMs = 2000) {
     await new Promise((r) => requestAnimationFrame(r));
   }
   console.warn("[strudel-p5] No host canvas found; using viewport fallback");
-  return null;
+  return null; // we’ll use viewport rect
 }
 
 async function ensureHost() {
   if (!state.host) state.host = await waitForHostCanvas();
 }
 
-function getHostRect() {
+function hostRect() {
   if (state.host) return state.host.getBoundingClientRect();
   // viewport fallback
   return {
@@ -53,28 +53,20 @@ function getHostRect() {
   };
 }
 
-function ensureCanvas() {
-  if (!state.cvs) state.cvs = document.createElement("canvas"); // off-DOM
-  return state.cvs;
-}
-
-function syncCanvas() {
+function syncSize() {
   const dpr = window.devicePixelRatio || 1;
   state.pointer.dpr = dpr;
-  const r = getHostRect();
-  const w = Math.max(1, Math.round(r.width * dpr));
-  const h = Math.max(1, Math.round(r.height * dpr));
-  const cvs = ensureCanvas();
-  if (cvs.width !== w || cvs.height !== h) {
-    cvs.width = w;
-    cvs.height = h;
-    if (state.inst) state.inst.resizeCanvas(w, h);
+  const r = hostRect();
+  const W = Math.max(1, Math.round(r.width * dpr));
+  const H = Math.max(1, Math.round(r.height * dpr));
+  if (state.g && (state.g.width !== W || state.g.height !== H)) {
+    state.g.resizeCanvas(W, H);
   }
 }
 
 function installPointer() {
   const upd = (e) => {
-    const r = getHostRect();
+    const r = hostRect();
     const x = e.clientX ?? 0,
       y = e.clientY ?? 0;
     state.pointer.inside =
@@ -122,8 +114,8 @@ function installPointer() {
 export async function mountP5({
   webgl = true,
   pixelDensity = 1,
-  setup = null,
-  draw = null,
+  setup = null, // (p, api) => void   — use api.g for drawing
+  draw = null, // (p, api) => void
 } = {}) {
   if (!window.p5) await import(P5_URL);
 
@@ -132,36 +124,46 @@ export async function mountP5({
     state.inst?.remove();
   } catch {}
   state.inst = null;
-  ensureCanvas();
+  state.g = null;
 
-  await ensureHost(); // ← wait for Strudel host if available
-  syncCanvas();
+  await ensureHost();
   installPointer();
 
   state.inst = new p5((p) => {
     p.setup = () => {
-      syncCanvas();
+      // Create a tiny hidden main canvas (required by p5), but we won’t use it.
+      const hidden = p.createCanvas(1, 1, p.P2D);
+      hidden.canvas.style.display = "none";
       p.pixelDensity(pixelDensity);
-      const cvs = ensureCanvas();
-      p.createCanvas(cvs.width, cvs.height, webgl ? p.WEBGL : undefined, cvs);
-      if (webgl) p.rectMode(p.CORNER);
-      p.noStroke();
+
+      // Create our real offscreen render target as p5.Graphics
+      const r = hostRect();
+      const dpr = window.devicePixelRatio || 1;
+      const W = Math.max(1, Math.round(r.width * dpr));
+      const H = Math.max(1, Math.round(r.height * dpr));
+      state.g = p.createGraphics(W, H, webgl ? p.WEBGL : p.P2D);
+      if (webgl) state.g.rectMode(state.g.CORNER);
+      state.g.noStroke();
+
       if (typeof setup === "function") setup(p, api());
     };
+
     p.draw = () => {
-      syncCanvas();
+      syncSize(); // keep g in sync with host size/DPR
       if (typeof draw === "function") draw(p, api());
     };
   });
 
   function api() {
     const p = state.inst;
+    const g = state.g;
     return {
       p,
-      canvas: ensureCanvas(),
+      g, // <- draw HERE (p5.Graphics)
+      canvas: g?.canvas || null, // Hydra can sample this
       pointer: state.pointer, // {x,y,down,inside,dpr}
-      size: { w: p.width, h: p.height },
-      sync: syncCanvas,
+      size: g ? { w: g.width, h: g.height } : { w: 0, h: 0 },
+      sync: syncSize,
       setDraw(fn) {
         draw = fn;
       },
@@ -173,6 +175,7 @@ export async function mountP5({
           state.inst?.remove();
         } finally {
           state.inst = null;
+          state.g = null;
         }
       },
     };
@@ -192,8 +195,12 @@ export async function hydraGate({
   window[visVar] = window[visVar] || { on: 1 };
   window[mixVar] = window[mixVar] || { osc: 0 };
 
-  // init Hydra source from p5 canvas
-  window[sName].init({ src: state.inst?.canvas || state.cvs });
+  // Use the p5.Graphics canvas if present
+  const srcCanvas = state.g?.canvas || null;
+  if (!srcCanvas)
+    console.warn("[strudel-p5] hydraGate: offscreen canvas not ready yet");
+
+  window[sName].init({ src: srcCanvas });
 
   const layer =
     oscLayer ||
