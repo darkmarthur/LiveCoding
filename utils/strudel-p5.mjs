@@ -2,6 +2,7 @@
 // Licensed CC BY-NC-SA 4.0
 // p5 ↔ Strudel ↔ Hydra bridge (headless p5, DPR sync, pointer tracking)
 // Exports: mountP5, hydraGate
+// v1.1
 
 const P5_URL = "https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js";
 
