@@ -15,7 +15,9 @@ const PTN_BEAT = "{30 50 30 50}%8";
 const PTN_BEAT2 = "{.25 .28 .25 .28}%8";
 KICK: s(PTN_BD).bank("tr505").dist(2).lpf(1500).duck(2);
 // .gain(1)
-HIHAT: s("~ hh ~ hh ~ hh ~ hh").bank("tr909");
+HIHAT: s("~ hh ~ hh ~ hh ~ hh")
+  .bank("tr909")
+  .rarely((x) => x.ply(2));
 
 PIANO: n("[7,2,4]".add("<0 0 4 3>"))
   .scale("D3:minor")
