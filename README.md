@@ -1,4 +1,4 @@
-# 🌑 Poetic Prologue for Livecoding
+# 🌑 MDQ LIVE CODING / LIVE CINEMA CODING
 
 Before we start, I want to share something with you.
 
