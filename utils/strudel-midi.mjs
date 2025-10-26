@@ -12,6 +12,7 @@
 // - Giphy URL helper
 // - Web MIDI bootstrap (choose output by name)
 // - Strudel Pattern helpers: .tomidi(), .pgm()
+// v1.1.3
 
 
 // ----------------- RANDOM / MEDIA -----------------

@@ -10,7 +10,7 @@
 // utils/strudel-p5.mjs
 // p5 ↔ Strudel ↔ Hydra bridge (off-DOM p5.Graphics, DPR sync, pointer tracking)
 // Exports: mountP5, hydraGate
-// v1.2
+// v1.1.3
 
 const P5_URL = "https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js";
 
