@@ -14,6 +14,51 @@
 // - Strudel Pattern helpers: .tomidi(), .pgm()
 // v1.1.3
 
+/**
+ * ──────────────────────────────────────────────────────────────────────────────
+ * STRUDDEL-MIDI.MJS  —  Utility Pack for Strudel Livecoding + WebMIDI
+ * Licensed under CC BY-NC-SA 4.0
+ *
+ * This module provides a plug-and-play toolkit to use WebMIDI, send Program
+ * Change / MIDI notes from Strudel patterns, and access small utility functions
+ * such as random number helpers and Giphy media URLs. It is designed so you can
+ * reuse MIDI + helper functions across multiple Strudel sketches without
+ * copy-pasting boilerplate code.
+ *
+ * ✦ FEATURES
+ * • WebMIDI initialization and MIDI output selection
+ * • Helpers for sending Program Change, CC, Note On/Off directly
+ * • Strudel Pattern extensions:
+ *      .tomidi(chan, velocity, length) → route a pattern to a MIDI channel
+ *      .pgm({chan, prog, mode})       → insert Program Change into patterns
+ *        Modes:  'prepend' (default), 'append', or 'solo'
+ * • Random utilities:  randInt(min,max), pick(array)
+ * • Giphy helper: giphyMp4(id) → returns a Giphy .mp4 URL for Hydra/Video use
+ *
+ * ✦ QUICK START
+ *    const MIDI = await import('<URL>/struddle-midi.mjs')
+ *    await MIDI.initMIDI({ nameMatch: 'IAC' })   // optional: select output by name
+ *    MIDI.installStrudelHelpers()                // enables .tomidi() + .pgm()
+ *
+ * ✦ EXAMPLES
+ *    BASS: n("0 [3 5] 4").scale("c2 minor").tomidi(0, 0.9, 0.25)
+ *    BASS.pgm({ chan: 0, prog: 34 })   // Set synth preset before notes
+ *
+ *    // Send CC/PC manually:
+ *    MIDI.sendPC(0, 12)                // Program Change #12 on channel 1
+ *    MIDI.sendCC(0, 74, 90)            // CC74 cutoff = 90 value
+ *
+ *    // Use random & Giphy helpers
+ *    pick(['a','b','c'])
+ *    randInt(1, 10)
+ *    s1.initVideo(giphyMp4('l0MYB8Ory7Hqefo9a'))
+ *
+ * Designed for Strudel users who want to sequence hardware synths,
+ * external VSTs, or MIDI devices while still using Strudel’s pattern language.
+ *
+ * ──────────────────────────────────────────────────────────────────────────────
+ */
+
 
 // ----------------- RANDOM / MEDIA -----------------
 export function randInt(min, max) {
