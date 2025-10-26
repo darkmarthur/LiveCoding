@@ -1,9 +1,18 @@
+// ¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø, ✧ ✦ ✧ Mario D. Quiroz ✧ ✦ ✧ ¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
+
+// https://www.instagram.com/mariodquiroz/
+// https://soundcloud.com/mario-quiroz
+// https://link.me/mariodquiroz
+
+// Follow me on instagram or soundcloud if this code is useful for you
+
 // Licensed CC BY-NC-SA 4.0
 // STRUDDEL MIDI / UTILS PACK
 // - Random helpers
 // - Giphy URL helper
 // - Web MIDI bootstrap (choose output by name)
 // - Strudel Pattern helpers: .tomidi(), .pgm()
+
 
 // ----------------- RANDOM / MEDIA -----------------
 export function randInt(min, max) {

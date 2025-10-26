@@ -1,5 +1,13 @@
-// utils/strudel-p5.mjs
+// ¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø, ✧ ✦ ✧ Mario D. Quiroz ✧ ✦ ✧ ¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
+
+// https://www.instagram.com/mariodquiroz/
+// https://soundcloud.com/mario-quiroz
+// https://link.me/mariodquiroz
+
+// Follow me on instagram or soundcloud if this code is useful for you
+
 // Licensed CC BY-NC-SA 4.0
+// utils/strudel-p5.mjs
 // p5 ↔ Strudel ↔ Hydra bridge (off-DOM p5.Graphics, DPR sync, pointer tracking)
 // Exports: mountP5, hydraGate
 // v1.2
