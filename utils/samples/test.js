@@ -10,14 +10,14 @@ samples('github:kyrsive/gc-glitches')
 samples('github:kyrsive/gc-wavetables')
 
 samples({
-jp1: '234965__reitanna__japanese-what-do-you-want.wav',
-jp2: '235019__reitanna__japanese-hey.wav',
-jp3: '235128__reitanna__japanese-please.wav',
-jp4: '235154__reitanna__japanese-no-way.wav',
-jp5: '235155__reitanna__japanese-no.wav',
-jp6: '241215__reitanna__japanese-phrase-request.wav',
-jp7: '323192__alivvie__hisashiburi1.mp3',
-jp8: '323208__alivvie__ohayou2.mp3'
+  jp1: '234965__reitanna__japanese-what-do-you-want.wav',
+  jp2: '235019__reitanna__japanese-hey.wav',
+  jp3: '235128__reitanna__japanese-please.wav',
+  jp4: '235154__reitanna__japanese-no-way.wav',
+  jp5: '235155__reitanna__japanese-no.wav',
+  jp6: '241215__reitanna__japanese-phrase-request.wav',
+  jp7: '323192__alivvie__hisashiburi1.mp3',
+  jp8: '323208__alivvie__ohayou2.mp3'
  }, 'https://raw.githubusercontent.com/darkmarthur/LiveCoding/main/utils/samples/');
 
 JPVOX: s("<jp1 jp2 jp3>")
