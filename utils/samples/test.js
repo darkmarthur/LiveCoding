@@ -38,6 +38,13 @@ _GLITCH: n("9 8 6 18 20").s("gglitch")
   // .mask("<0 1 1 0 1 0 0 0 0>*2")
   .gain(0.5)
 
+samples('github:darkmarthur/LiveCoding/main/utils/samples')
+JPVOX: s("<japanese:0 japanese:1 japanese:2 japanese:3>")
+  .gain(1.8)
+  .slow(2)
+  .room(2)
+
+
 
 
 
